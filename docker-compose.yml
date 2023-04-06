@@ -1,0 +1,32 @@
+version: "1.29"
+services:
+
+  rabbitmq:
+    image: rabbitmq:3-management-alpine
+    container_name: 'rabbitmq'
+#    hostname: 'localhost'
+
+    ports:
+      - 8000:8000
+    networks:
+      - rabbitmq
+
+
+
+#  web:
+#    build:
+#      dockerfile: api/Dockerfile
+#    ports:
+#      - "8000:8000"
+#    ports:
+#        - 8000:8000
+#        - 15672:15672
+#    volumes:
+#        - ~/.docker-conf/rabbitmq/data/:/var/lib/rabbitmq/
+#        - ~/.docker-conf/rabbitmq/log/:/var/log/rabbitmq
+#    networks:
+#        - rabbitmq
+
+networks:
+  rabbitmq:
+    driver: bridge
