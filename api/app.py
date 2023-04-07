@@ -22,7 +22,7 @@ async def send(request: dict):
         print(" [x] Sent 'Hello World!'")
 
         queue1 = await channel.declare_queue("hell2", durable=True)
-        await queue1.purge()
+        # await queue1.purge()
         async with queue1.iterator() as queue_iter:
             async for message in queue_iter:
                 async with message.process():
