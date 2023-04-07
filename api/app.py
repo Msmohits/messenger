@@ -6,8 +6,11 @@ from fastapi import FastAPI
 
 app = FastAPI()
 
+
+request_data = {}
 @app.post('/send')
 async def send(request: dict):
+    request_data.update(request)
     connection = await connect(os.getenv('test'))
 
     async with connection:
@@ -19,10 +22,10 @@ async def send(request: dict):
             routing_key=queue.name,
         )
 
-        print(" [x] Sent 'Hello World!'")
+        print("Sent:", request)
 
         queue1 = await channel.declare_queue("hell2", durable=True)
-        await queue1.purge()
+        # await queue1.purge()
         async with queue1.iterator() as queue_iter:
             async for message in queue_iter:
                 async with message.process():

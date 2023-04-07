@@ -5,7 +5,7 @@ import os
 from aio_pika import connect, Message
 from aio_pika.abc import AbstractIncomingMessage
 
-async def on_message(message: AbstractIncomingMessage) -> None:
+async def on_message(message) -> None:
     connection = await connect(os.getenv('test'))
     async with connection:
         channel = await connection.channel()
@@ -26,11 +26,18 @@ async def receive() -> None:
     async with connection:
         channel = await connection.channel()
         queue = await channel.declare_queue("hello")
+        async with queue.iterator() as queue_iter:
+            async for message in queue_iter:
+                async with message.process():
+                    # print('mmmm', message.body)
+                    await on_message(message)
 
-        while True:
-            event = asyncio.Event()
-            await queue.consume(on_message)
-            await event.wait()
+                    # return json.loads(message.body)
+
+        # while True:
+        #     event = asyncio.Event()
+        #     await queue.consume(on_message)
+        #     await event.wait()
 
 while True:
     try:
