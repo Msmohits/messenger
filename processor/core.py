@@ -32,9 +32,6 @@ async def receive() -> None:
             await queue.consume(on_message)
             await event.wait()
 
-
-
-
 while True:
     try:
         asyncio.run(receive())
